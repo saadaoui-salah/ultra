@@ -95,7 +95,6 @@
         const amount = amountInput.value.trim();
         const memo = memoInput.value.trim();
 
-        const amountPattern = /^\d+\.\d{8}$/;
         let hasError = false;
 
         if (receiver === "") {
@@ -108,6 +107,7 @@
           hasError = true;
         }
 
+        const amountPattern = /^\d+\.\d{8}$/;
         if (amount === "" || !amountPattern.test(amount)) {
           amountError.classList.remove("hidden");
           hasError = true;
@@ -152,6 +152,9 @@
           sendBtn.disabled = false;
           localStorage.setItem("eagerlyConnection", "true");
           localStorage.setItem("wallletID", walletId);
+          receiverInput.value = "";
+          amountInput.value = "";
+          memoInput.value = "";
         } catch (err) {
           alert("❌ Failed to connect to wallet:");
           console.log(err);
