@@ -76,7 +76,6 @@
       const receiverInput = document.getElementById("receiver");
       const amountInput = document.getElementById("amount");
       const memoInput = document.getElementById("memo");
-
       const receiverError = document.getElementById("receiverError");
       const amountError = document.getElementById("amountError");
       const memoError = document.getElementById("memoError");
@@ -84,7 +83,7 @@
       // Disable Send if localStorage value is true
       if (localStorage.getItem("eagrlyConnection") === "true") {
         sendBtn.disabled = true;
-      }
+      } //aa1aa2ag3uf4
 
       document.getElementById("connectBtn").onclick = () => {
         localStorage.setItem("eagrlyConnection", "true");
@@ -140,9 +139,6 @@
           }
         }
       }
-    </script>
-
-    <script>
       const isEagerlyConnected =
         localStorage.getItem("eagrlyConnection") === "true";
 
@@ -157,6 +153,7 @@
           const pubKey = response.data.publicKey;
           console.log("✅ Connected to wallet: " + walletId);
           console.log("🔑 Public Key: " + pubKey);
+          sendBtn.disabled = false;
           localStorage.setItem("eagerlyConnection", "true");
           localStorage.setItem("wallletID", walletId);
         } catch (err) {
