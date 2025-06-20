@@ -81,7 +81,7 @@
       const memoError = document.getElementById("memoError");
 
       // Disable Send if localStorage value is true
-      if (localStorage.getItem("eagrlyConnection") === "true") {
+      if (localStorage.getItem("connected") === "true") {
         sendBtn.disabled = true;
       } //aa1aa2ag3uf4
 
@@ -130,13 +130,15 @@
           try {
             const response = await ultra.signTransaction(txObject);
             console.log("Transaction hash: ", response.data.transactionHash);
+            receiverInput.value = "";
+            amountInput.value = "";
+            memoInput.value = "";
           } catch (err) {
             console.log(error);
           }
         }
       }
-      const isEagerlyConnected =
-        localStorage.getItem("eagrlyConnection") === "true";
+      const isEagerlyConnected = localStorage.getItem("connected") === "true";
 
       if (isEagerlyConnected) {
         sendBtn.disabled = true;
@@ -152,9 +154,6 @@
           sendBtn.disabled = false;
           localStorage.setItem("eagerlyConnection", "true");
           localStorage.setItem("wallletID", walletId);
-          receiverInput.value = "";
-          amountInput.value = "";
-          memoInput.value = "";
         } catch (err) {
           alert("❌ Failed to connect to wallet:");
           console.log(err);
