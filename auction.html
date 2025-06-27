@@ -748,8 +748,8 @@
               );
             } catch (error) {
               logMessage("Pls connect to your wallet", "error");
-              document.querySelector('button["submit"]').map((button) => {
-                button.disabled = true;
+              document.querySelector('button[type="submit"]').map((button) => {
+                button.disabled = false;
               });
             }
           } else {
