@@ -748,9 +748,11 @@
               );
             } catch (error) {
               logMessage("Pls connect to your wallet", "error");
-              document.querySelectorAll('button[type="submit"]').map((button) => {
-                button.disabled = false;
-              });
+              document
+                .querySelectorAll('button[type="submit"]')
+                .forEach((button) => {
+                  button.disabled = false;
+                });
             }
           } else {
             logMessage(
@@ -800,9 +802,11 @@
           if (!ultra) throw new Error("Ultra wallet not detected");
           const account = await ultra.connect();
           handleConnectionSuccess(account);
-          document.querySelectorAll('button[type="submit"]').map((button) => {
-            button.disabled = false;
-          });
+          document
+            .querySelectorAll('button[type="submit"]')
+            .forEach((button) => {
+              button.disabled = false;
+            });
         } catch (error) {
           logMessage(`Failed to connect: ${error.message}`, "error");
         }
