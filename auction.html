@@ -800,7 +800,7 @@
           if (!ultra) throw new Error("Ultra wallet not detected");
           const account = await ultra.connect();
           handleConnectionSuccess(account);
-          document.querySelector('button["submit"]').map((button) => {
+          document.querySelector('button[type="submit"]').map((button) => {
             button.disabled = false;
           });
         } catch (error) {
