@@ -1,73 +1,74 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { showToast } from './uiSlice';
+import { apolloClient } from '../../apollo';
+import { gql } from '@apollo/client';
 
-// Mock NFT data
-const mockNFTs = [
-  {
-    id: 'nft_001',
-    name: 'Cosmic Warrior #1',
-    image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=400&fit=crop',
-    walletId: 'ultra_abc123',
-    description: 'A legendary warrior from the cosmic realm',
-    bids: 5,
-    inAuction: false,
-  },
-  {
-    id: 'nft_002',
-    name: 'Digital Dreamscape',
-    image: 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=400&h=400&fit=crop',
-    walletId: 'ultra_def456',
-    description: 'Abstract digital art piece',
-    bids: 0,
-    inAuction: false,
-  },
-  {
-    id: 'nft_003',
-    name: 'Neon City Lights',
-    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop',
-    walletId: 'ultra_ghi789',
-    description: 'Cyberpunk cityscape at night',
-    bids: 12,
-    inAuction: true,
-  },
-  {
-    id: 'nft_004',
-    name: 'Mystic Forest',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop',
-    walletId: 'ultra_jkl012',
-    description: 'Enchanted forest scene',
-    bids: 3,
-    inAuction: false,
-  },
-  {
-    id: 'nft_005',
-    name: 'Quantum Particles',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop',
-    walletId: 'ultra_mno345',
-    description: 'Scientific visualization of quantum mechanics',
-    bids: 8,
-    inAuction: true,
-  },
-];
-
-// Mock GraphQL-like function
-const mockFetchNFTs = async () => {
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  
-  // Simulate token refresh
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  return mockNFTs;
-};
+const UNIQS_OF_WALLET = gql`
+  query UniqsOfWallet($pagination: PaginationInput, $resale: Boolean, $walletId: WalletId!) {
+    uniqsOfWallet(pagination: $pagination, resale: $resale, walletId: $walletId) {
+      data {
+        id
+        metadata {
+          content {
+            medias {
+              product {
+                uri
+              }
+            }
+            name
+            properties
+            resources {
+              key
+              value {
+                contentType
+                integrity {
+                  hash
+                  type
+                }
+                uri
+              }
+            }
+            subName
+          }
+        }
+        owner
+      }
+      pagination {
+        limit
+        skip
+      }
+      totalCount
+    }
+  }
+`;
 
 export const fetchNFTs = createAsyncThunk(
   'nfts/fetchNFTs',
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, dispatch, rejectWithValue }) => {
     try {
-      const nfts = await mockFetchNFTs();
-      return nfts;
+      const walletId = getState().auth.walletId;
+      if (!walletId) throw new Error('Wallet not connected');
+      const { data } = await apolloClient.query({
+        query: UNIQS_OF_WALLET,
+        variables: {
+          pagination: { limit: 25, skip: 0 },
+          walletId,
+        },
+        fetchPolicy: 'network-only',
+      });
+      const nfts = data.uniqsOfWallet.data;
+      return nfts.map(nft => ({
+        id: nft.id,
+        name: nft.metadata?.content?.name || 'Unnamed NFT',
+        image: nft.metadata?.content?.medias?.[0]?.product?.uri || '',
+        walletId: nft.owner,
+        description: nft.metadata?.content?.subName || '',
+        bids: 0,
+        inAuction: false,
+      }));
     } catch (error) {
-      return rejectWithValue('Failed to fetch NFTs');
+      dispatch(showToast({ message: error.message, type: 'error' }));
+      return rejectWithValue(error.message);
     }
   }
 );

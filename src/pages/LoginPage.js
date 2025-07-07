@@ -15,11 +15,18 @@ const LoginPage = () => {
     isLoading, 
     error 
   } = useSelector((state) => state.auth);
-
+  // double check all code here bcz when ultra is installed, it kept loading forever
+  // add needed logs to debug the issue  
+  console.log('isWalletInstalled', isWalletInstalled);
+  console.log('isConnected', isConnected);
+  console.log('isLoading', isLoading);
+  console.log('error', error);
+  console.log('walletId', walletId);
+  
   useEffect(() => {
     // Check wallet installation on page load
     dispatch(checkWalletInstallation());
-  }, [dispatch]);
+  }, [dispatch]); 
 
   useEffect(() => {
     // Auto-connect if wallet is installed

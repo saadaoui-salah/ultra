@@ -8,25 +8,28 @@ import MyAuctionsPage from './pages/MyAuctionsPage';
 import Navigation from './components/Navigation';
 import Toast from './components/Toast';
 import './App.css';
+import { ApolloProvider, apolloClient } from './apollo';
 
 function App() {
   return (
-    <Provider store={store}>
-      <Router>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-          <Navigation />
-          <main className="container mx-auto px-4 py-8">
-            <Routes>
-              <Route path="/" element={<Navigate to="/login" replace />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/nfts" element={<NFTsPage />} />
-              <Route path="/my-auctions" element={<MyAuctionsPage />} />
-            </Routes>
-          </main>
-          <Toast />
-        </div>
-      </Router>
-    </Provider>
+    <ApolloProvider client={apolloClient}>
+      <Provider store={store}>
+        <Router>
+          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+            <Navigation />
+            <main className="container mx-auto px-4 py-8">
+              <Routes>
+                <Route path="/" element={<Navigate to="/login" replace />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/nfts" element={<NFTsPage />} />
+                <Route path="/my-auctions" element={<MyAuctionsPage />} />
+              </Routes>
+            </main>
+            <Toast />
+          </div>
+        </Router>
+      </Provider>
+    </ApolloProvider>
   );
 }
 
