@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Provider } from 'react-redux';
 import store from './store';
 import LoginPage from './pages/LoginPage';
-import NFTsPage from './pages/NFTsPage';
+import MyNFTsPage from './pages/NFTsPage';
 import MyAuctionsPage from './pages/MyAuctionsPage';
 import Navigation from './components/Navigation';
 import Toast from './components/Toast';
@@ -21,7 +21,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Navigate to="/login" replace />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/nfts" element={<NFTsPage />} />
+                <Route path="/nfts" element={<MyNFTsPage />} />
                 <Route path="/my-auctions" element={<MyAuctionsPage />} />
               </Routes>
             </main>

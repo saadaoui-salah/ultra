@@ -9,7 +9,7 @@ import AuctionModal from '../components/AuctionModal';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import { CubeIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 
-const NFTsPage = () => {
+const MyNFTsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isConnected } = useSelector((state) => state.auth);
@@ -57,7 +57,7 @@ const NFTsPage = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">NFT Collection</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">My NFTs</h1>
           <p className="text-gray-600 dark:text-gray-300 mt-1">Browse and auction your NFTs</p>
         </div>
         <button
@@ -118,4 +118,4 @@ const NFTsPage = () => {
   );
 };
 
-export default NFTsPage; 
+export default MyNFTsPage; 
