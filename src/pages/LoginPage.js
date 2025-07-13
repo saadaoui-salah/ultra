@@ -22,18 +22,20 @@ const LoginPage = () => {
   console.log('isLoading', isLoading);
   console.log('error', error);
   console.log('walletId', walletId);
-  
-  useEffect(() => {
-    // Check wallet installation on page load
-    dispatch(checkWalletInstallation());
-  }, [dispatch]); 
+
+
 
   useEffect(() => {
-    // Auto-connect if wallet is installed
-    if (isWalletInstalled && !isConnected && !isLoading) {
-      dispatch(connectWallet({ onlyIfTrusted: true }));
-    }
-  }, [dispatch, isWalletInstalled, isConnected, isLoading]);
+    dispatch(checkWalletInstallation());
+  }, [dispatch]); 
+    
+
+useEffect(() => {
+  if (isWalletInstalled && !isConnected && !isLoading && !error) {
+    dispatch(connectWallet({ onlyIfTrusted: true }));
+  }
+}, [dispatch, isWalletInstalled, isConnected, isLoading]);
+
 
   useEffect(() => {
     // Redirect to NFTs page if connected
